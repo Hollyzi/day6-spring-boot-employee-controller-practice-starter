@@ -47,4 +47,9 @@ public class EmployeeRepository {
         getEmployeeById.setSalary(employee.getSalary());
         return getEmployeeById;
     }
+
+    public List<Employee> page(Integer page, Integer size) {
+        return employees.stream().skip((page-1)*size)
+                .limit(size).collect(Collectors.toList());
+    }
 }

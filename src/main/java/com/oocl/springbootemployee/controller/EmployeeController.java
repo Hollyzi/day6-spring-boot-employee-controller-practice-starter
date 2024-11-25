@@ -48,4 +48,9 @@ public class EmployeeController {
     public Employee update(@PathVariable("employeeId") Integer employeeId ,@RequestBody Employee employee){
         return employeeRepository.update(employeeId,employee);
     }
+
+    @GetMapping(params = {"page","size"})
+    public List<Employee> page(@RequestParam Integer page,@RequestParam Integer size){
+        return  employeeRepository.page(page,size);
+    }
 }
