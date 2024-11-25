@@ -27,6 +27,7 @@ public class EmployeeController {
         return employeeRepository.getById(employeeId);
     }
 
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @DeleteMapping("/{employeeId}")
     public boolean deleteById(@PathVariable("employeeId") Integer employeeId) {
         return employeeRepository.deleteById(employeeId);
