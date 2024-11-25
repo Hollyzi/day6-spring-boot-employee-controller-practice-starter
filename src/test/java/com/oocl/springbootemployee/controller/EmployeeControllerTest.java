@@ -109,23 +109,21 @@ class EmployeeControllerTest {
         String employeeJsonString = client.perform(MockMvcRequestBuilders.post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn().getResponse().getContentAsString();
+                        .andExpect(MockMvcResultMatchers.status().isCreated())
+                        .andReturn().getResponse().getContentAsString();
 
         Employee employee = json.parseObject(employeeJsonString);
         assertThat(employee).usingRecursiveComparison().isEqualTo(newEmployee);
     }
 
-//
-//    @Test
-//    void should_return_true_when_deleteById_given_employeeId()throws Exception{
-//        //Given
-//        final boolean givenBooleanResult=employRepository.deleteById(1);
-//        //When
-//        client.perform(MockMvcRequestBuilders.delete("/employees/1"))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andReturn().getAsyncResult();
-//
-//    }
+    @Test
+    void should_return_true_when_deleteById_given_employeeId()throws Exception{
+        //Given
+        //When
+        client.perform(MockMvcRequestBuilders.delete("/employees/1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andReturn().getResponse().getContentAsString();
+
+    }
 
 }
