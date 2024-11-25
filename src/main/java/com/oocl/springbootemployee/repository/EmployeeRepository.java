@@ -40,4 +40,11 @@ public class EmployeeRepository {
         employees.add(employee);
         return employee;
     }
+
+    public Employee update(Integer employeeId, Employee employee) {
+        Employee getEmployeeById = getById(employeeId);
+        getEmployeeById.setAge(employee.getAge());
+        getEmployeeById.setSalary(employee.getSalary());
+        return getEmployeeById;
+    }
 }
