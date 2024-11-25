@@ -14,8 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.MultiValueMap;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -143,6 +147,28 @@ class EmployeeControllerTest {
         Employee givenEmployee = employeeRepository.getById(1);
         Employee employee = json.parseObject(employeeJsonString);
         assertThat(employee).usingRecursiveComparison().isEqualTo(givenEmployee);
+    }
+    @Test
+    void should_return_employees_when_getByPageQuery_given_page_1_size_5() throws Exception {
+        // Given
+        employeeRepository.create(new Employee(4, "name3", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(5, "name3", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(6, "name3", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(7, "name3", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(8, "name3", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(9, "name3", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(10, "name3", 15, Gender.FEMALE, 18.0));
+        final List<Employee> givenEmployees = employeeRepository.page(1,5);
+        // When
+        // Then
+        String employeesJsonString = client.perform(MockMvcRequestBuilders.get("/employees")
+                        .param("page","1").param("size","5"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(givenEmployees.size())))
+                .andReturn().getResponse().getContentAsString();
+
+        List<Employee> employees = jsonList.parseObject(employeesJsonString);
+        assertThat(employees).usingRecursiveComparison().isEqualTo(givenEmployees);
     }
 
 }
