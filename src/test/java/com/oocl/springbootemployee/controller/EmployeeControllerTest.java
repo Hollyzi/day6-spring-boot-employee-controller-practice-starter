@@ -109,21 +109,40 @@ class EmployeeControllerTest {
         String employeeJsonString = client.perform(MockMvcRequestBuilders.post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson))
-                        .andExpect(MockMvcResultMatchers.status().isCreated())
-                        .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andReturn().getResponse().getContentAsString();
 
         Employee employee = json.parseObject(employeeJsonString);
         assertThat(employee).usingRecursiveComparison().isEqualTo(newEmployee);
     }
 
     @Test
-    void should_return_true_when_deleteById_given_employeeId()throws Exception{
+    void should_return_true_when_deleteById_given_employeeId() throws Exception {
         //Given
         //When
         client.perform(MockMvcRequestBuilders.delete("/employees/1"))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andReturn().getResponse().getContentAsString();
 
+    }
+
+    @Test
+    void should_return_updated_employee_when_update_employee_given_age_and_salary() throws Exception {
+        //Given
+        String employeeJson = " {\n" +
+                "        \"age\": 89,\n" +
+                "        \"salary\": 1890.0\n" +
+                "    }";
+        //When
+        //Then
+        String employeeJsonString = client.perform(MockMvcRequestBuilders.put("/employees/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(employeeJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Employee givenEmployee = employeeRepository.getById(1);
+        Employee employee = json.parseObject(employeeJsonString);
+        assertThat(employee).usingRecursiveComparison().isEqualTo(givenEmployee);
     }
 
 }
